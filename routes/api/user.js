@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 const validateSignUpInput = require('../../validation/signup');
@@ -22,7 +22,7 @@ router.post('/signup', (req, res) => {
                     return res.status(400).json({ user_name: "Username already exists" });
             } else {
                 const newUser = new User({ user_name, email, password });
-                bcrypt.genSalt(10, (err, sale) => {
+                bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
                         if (err) throw (err);
                         newUser.password = hash;

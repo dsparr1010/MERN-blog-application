@@ -1,5 +1,5 @@
-const ExtractJwt = require('passport-jwt').Strategy;
-const JwtStrategy = require('passport-jwt').ExtractJwt;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require('passport-jwt').Strategy;
 const User = require('../models/User');
 const SECRET = process.env.SECRET;
 

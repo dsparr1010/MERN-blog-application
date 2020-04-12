@@ -7,12 +7,13 @@ const passport = require('passport');
 
 require('dotenv').config();
 
-app.user(passport.initialize());
+app.use(passport.initialize());
 require('./middleware/passport')(passport);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api/users', require('./routes/api/user'));
+app.use('/api/posts', require('./routes/api/post'));
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
     .then(() => console.log('connected to DB'))

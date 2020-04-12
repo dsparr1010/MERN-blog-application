@@ -22,22 +22,24 @@ router.get('/author/:author', (req, res) => {
         .catch(err => res.status(400).json({ author: "Error fetching posts from specific author" }))
 });
 
-router.post('/create', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post(
+  "/create",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     const author = req.user.user_name;
     const post = req.body;
     const { errors, isValid } = validatePostInput(post);
-
     if (!isValid) {
-        return res.status(400).json(errors);
-    };
-
+      return res.status(400).json(errors);
+    }
     post.author = author;
     const newPost = new Post(post);
-
-    newPost.save()
-        .then(doc => res.json(doc))
-        .catch(err => console.log({ create: "Error creating new post" }))
-});
+    newPost
+      .save()
+      .then((doc) => res.json(doc))
+      .catch((err) => console.log({ create: "Error creating new post" }));
+  }
+);
 
 router.patch('/update/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     const author = req.user.user_name;
@@ -59,3 +61,17 @@ router.patch('/update/:id', passport.authenticate('jwt', { session: false }), (r
         );
 });
 
+router.delete(
+    "/delete/:id",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+        const author = req.user.user_name;
+        Post.findOneAndDelete({ author, _id: req.params.id })
+            .then(doc => res.status(200).json(doc))
+            .catch(err =>
+                res.status(400).json({ delete: "Error deleting a post" })
+            );
+    }
+);
+
+module.exports = router;
